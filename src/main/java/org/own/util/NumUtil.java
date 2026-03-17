@@ -12,24 +12,26 @@ public class NumUtil {
      */
     public static int countResponseTimeRegressions(List<Integer> responseTimes) {
         // Write your code here
-        var size = responseTimes.size();
-        var prefixAvg = new double[size];
         var count = 0;
-        for (var index = 0; index < size; index++) {
-            var current = responseTimes.get(index);
-            if (index > 0) {
-                if (current > prefixAvg[index - 1]) {
-                    System.out.println(current + " greater than previous avg");
-                    count++;
+        if (responseTimes != null && !responseTimes.isEmpty()) {
+            var size = responseTimes.size();
+            var prefixAvg = new double[size];
+            for (var index = 0; index < size; index++) {
+                var current = responseTimes.get(index);
+                if (index > 0) {
+                    if (current > prefixAvg[index - 1]) {
+                        System.out.println(current + " greater than previous avg");
+                        count++;
+                    }
+                    prefixAvg[index] = ((prefixAvg[index - 1] + current) / index);
+                } else {
+                    prefixAvg[index] = current;
                 }
-                prefixAvg[index] = ((prefixAvg[index - 1] + current) / index);
-            } else {
-                prefixAvg[index] = current;
             }
-
         }
         return count;
     }
+
 
 }
 
