@@ -88,4 +88,44 @@ public class MountainPeak {
 
         return path;
     }
+
+    public static List<int[]> pathTraverse(int[][] mountain, int startRow, int startCol) {
+        // Write your code here
+        List<int[]> path = new ArrayList<>();
+        path.add(new int[]{startRow,startCol});
+        var rows = mountain.length;
+        var cols = mountain[0].length;
+        Queue<int[]> queue = new LinkedList<>();
+        var altitude = mountain[startRow][startCol];
+
+        queue.offer(new int[]{startRow, startCol});
+        int[][] fourDirections = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+        while (!queue.isEmpty()) {
+            var position = queue.poll();
+            var row = position[0];
+            var col = position[1];
+            var maxHeight = -1;
+            var maxRow = -1;
+            var maxCol = -1;
+            for (int[] dir : fourDirections) {
+                var newRow = row + dir[0];
+                var newCol = col + dir[1];
+                if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols && mountain[newRow][newCol] > altitude) {
+                    if (altitude > maxHeight) {
+                        maxHeight = altitude;
+                        maxRow = newRow;
+                        maxCol = newCol;
+                    }
+                    altitude = mountain[newRow][newCol];
+                }
+            }
+            if (maxHeight > -1) {
+                path.add(new int[]{maxRow,maxCol});
+                queue.offer(new int[]{maxRow, maxCol});
+            }
+
+        }
+
+        return path;
+    }
 }

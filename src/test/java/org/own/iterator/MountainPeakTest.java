@@ -59,4 +59,14 @@ class MountainPeakTest {
                 () -> assertEquals(5, elevationPath.get(1)),
                 () -> assertEquals(6, elevationPath.getLast()));
     }
+
+    @Test
+    void pathTraverse() {
+        var elevationPath = MountainPeak.pathTraverse(trailMap2,1,1);
+        assertAll(()-> assertNotNull(elevationPath),
+                () -> assertEquals(3, elevationPath.size()),
+                () -> assertArrayEquals(new int[]{1,1}, elevationPath.getFirst()),
+                () -> assertArrayEquals(new int[]{2,1}, elevationPath.get(1)),
+                () -> assertArrayEquals(new int[]{2,2}, elevationPath.getLast()));
+    }
 }

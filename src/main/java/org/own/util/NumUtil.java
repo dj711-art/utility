@@ -20,7 +20,6 @@ public class NumUtil {
                 var current = responseTimes.get(index);
                 if (index > 0) {
                     if (current > prefixAvg[index - 1]) {
-                        System.out.println(current + " greater than previous avg");
                         count++;
                     }
                     prefixAvg[index] = ((prefixAvg[index - 1] + current) / index);
@@ -94,6 +93,30 @@ public class NumUtil {
         }
         return count;
     }
+
+    /**
+     * 
+     * @param nums integer array.
+     * @return array length after removing duplicates in-place such that each element appears only once.
+     */
+    public static int removeDuplicates(int[] nums) {
+        if (nums.length == 0) {
+            return 0;
+        }
+
+        int writePointer = 1;
+
+        for (int readPointer = 1; readPointer < nums.length; readPointer++) {
+            if (nums[readPointer] != nums[readPointer - 1]) {
+                nums[writePointer] = nums[readPointer];
+                writePointer++;
+            }
+        }
+
+        return writePointer;
+    }
+
+
 
 }
 

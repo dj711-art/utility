@@ -24,4 +24,9 @@ class NumUtilTest {
         assertEquals(4,NumUtil.countSubMatrices(new int[][]{{7,6,3},{8,6,1}},18));
         assertEquals(6,NumUtil.countSubMatrices(new int[][]{{7,2,9},{1,5,0},{2,6,6}},20));
     }
+
+    @Test
+    void removeDuplicates() {
+        assertEquals(2,NumUtil.removeDuplicates(new int[]{1,1,2}));
+    }
 }
