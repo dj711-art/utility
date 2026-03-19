@@ -38,4 +38,19 @@ class NumUtilTest {
         assertEquals(15, NumUtil.maxSubArray(new int[]{1, 2, 3, 4, 5}));
         assertEquals(1, NumUtil.maxSubArray(new int[]{1, -1, 1, -1, 1}));
     }
+
+    @Test
+    void discountedPrice() {
+        var result = NumUtil.discountedPrice(new int[]{2, 3, 1, 2, 4, 2});
+        System.out.println(result);
+        assertAll(() -> assertEquals(2, result.size(), "Result must have two entries total discounted price and full indexes"));
+    }
+
+    @Test
+    void getNextMaxIndex() {
+        assertEquals(1, NumUtil.getNextMaxIndex(new int[]{3, 2, 2, 3}, 0));
+        assertEquals(2, NumUtil.getNextMaxIndex(new int[]{3, 2, 2, 3}, 2));
+        assertEquals(2, NumUtil.getNextMaxIndex(new int[]{2, 3, 1, 2, 4, 2}, 0));
+        assertEquals(5, NumUtil.getNextMaxIndex(new int[]{2, 3, 1, 2, 4, 2}, 3));
+    }
 }

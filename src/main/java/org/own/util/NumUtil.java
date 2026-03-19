@@ -1,5 +1,7 @@
 package org.own.util;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class NumUtil {
@@ -33,8 +35,9 @@ public class NumUtil {
 
     /**
      * From the given integer array nums, remove all occurrences of val from nums in-place.
+     *
      * @param nums integer array.
-     * @param val integer value to be removed from the array.
+     * @param val  integer value to be removed from the array.
      * @return length of the new array.
      */
     public static int removeElement(int[] nums, int val) {
@@ -64,11 +67,12 @@ public class NumUtil {
      * You are given a 0-indexed integer matrix grid and an integer k.
      * <p>
      * Return the number of that contain the top-left element of the grid, and have a sum less than or equal to k.
+     *
      * @param grid 0-indexed integer matrix grid.
-     * @param k integer.
+     * @param k    integer.
      * @return the number of that contain the top-left element of the grid, and have a sum less than or equal to k.
      */
-    public static int countSubMatrices(int[][] grid,int k){
+    public static int countSubMatrices(int[][] grid, int k) {
         var count = 0;
         var rows = grid.length;
         var cols = grid[0].length;
@@ -95,7 +99,7 @@ public class NumUtil {
     }
 
     /**
-     * 
+     *
      * @param nums integer array.
      * @return array length after removing duplicates in-place such that each element appears only once.
      */
@@ -118,14 +122,73 @@ public class NumUtil {
 
 
     public static int maxSubArray(int[] nums) {
-        if (nums.length == 0) { return 0;  }
+        if (nums.length == 0) {
+            return 0;
+        }
         var max = nums[0];
         var curr = nums[0];
         for (int i = 1; i < nums.length; i++) {
-            curr = Math.max(nums[i], curr+nums[i]);
+            curr = Math.max(nums[i], curr + nums[i]);
             max = Math.max(max, curr);
         }
         return max;
+    }
+
+    /**
+     * You are provided with integer array prices. Price will be discounted by the next smaller element to the right of the current element.
+     * If there is no smaller element to the right, then there is no discount for that element.
+     *
+     * @param prices integer array of prices.
+     * @return total discount price as the first element of the array. Second element will be space separated index of the prices without any discount.
+     */
+    public static List<String> discountedPrice(int[] prices) {
+        List<String> result = new ArrayList<>();
+        var minIndex = getNextMaxIndex(prices, 0);
+        var discountPrice = 0;
+        List<Integer> fullPriceIndexes = new ArrayList<>();
+
+        for (var index = 0; index < minIndex; index++) {
+            discountPrice += (prices[index] - prices[minIndex]);
+        }
+
+        var nextMinIndex = getNextMaxIndex(prices, minIndex);
+        for (var index = minIndex; index < prices.length; index++) {
+            if (index > nextMinIndex) {
+                nextMinIndex = getNextMaxIndex(prices, index);
+            }
+            if (nextMinIndex == index) {
+                discountPrice += prices[nextMinIndex];
+                fullPriceIndexes.add(index);
+            } else {
+                discountPrice += prices[index] - prices[nextMinIndex];
+            }
+
+        }
+
+        result.add(String.valueOf(discountPrice));
+        Collections.sort(fullPriceIndexes);
+        StringBuilder sb = new StringBuilder();
+        for (var index = 0; index < fullPriceIndexes.size(); index++) {
+            sb.append(fullPriceIndexes.get(index));
+            if (index != fullPriceIndexes.size() - 1) {
+                sb.append(" ");
+            }
+        }
+        result.add(sb.toString());
+        return result;
+    }
+
+    public static int getNextMaxIndex(int[] prices, int i) {
+        var minPrice = prices[i];
+        var minIndex = i;
+        for (int j = i + 1; j < prices.length; j++) {
+            if (prices[j] < minPrice) {
+                return j;
+            } else if (prices[j] == minPrice) {
+                minIndex = j;
+            }
+        }
+        return minIndex;
     }
 
 }
