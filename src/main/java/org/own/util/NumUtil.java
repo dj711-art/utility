@@ -3,6 +3,7 @@ package org.own.util;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Stack;
 
 public class NumUtil {
     /**
@@ -142,41 +143,45 @@ public class NumUtil {
      * @return total discount price as the first element of the array. Second element will be space separated index of the prices without any discount.
      */
     public static List<String> discountedPrice(int[] prices) {
+        int n = prices.length;
+        int[] finalPrices = new int[n];
+        System.arraycopy(prices, 0, finalPrices, 0, n);
+
+        Stack<Integer> stack = new Stack<>();
+        List<Integer> noDiscountIndices = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            // While the current price is less than or equal to the price at the top index
+            while (!stack.isEmpty() && prices[stack.peek()] >= prices[i]) {
+                finalPrices[stack.pop()] -= prices[i];
+            }
+            stack.push(i);
+        }
+
+        // Elements remaining in the stack had no smaller element to their right
+        long totalCost = 0;
+        while (!stack.isEmpty()) {
+            noDiscountIndices.add(stack.pop());
+        }
+
+        // Sort indices as per requirement and calculate total sum
+        Collections.sort(noDiscountIndices);
+        for (int p : finalPrices) totalCost += p;
+
+        // Formatting Output
         List<String> result = new ArrayList<>();
-        var minIndex = getNextMaxIndex(prices, 0);
-        var discountPrice = 0;
-        List<Integer> fullPriceIndexes = new ArrayList<>();
+        result.add(String.valueOf(totalCost));
 
-        for (var index = 0; index < minIndex; index++) {
-            discountPrice += (prices[index] - prices[minIndex]);
-        }
-
-        var nextMinIndex = getNextMaxIndex(prices, minIndex);
-        for (var index = minIndex; index < prices.length; index++) {
-            if (index > nextMinIndex) {
-                nextMinIndex = getNextMaxIndex(prices, index);
-            }
-            if (nextMinIndex == index) {
-                discountPrice += prices[nextMinIndex];
-                fullPriceIndexes.add(index);
-            } else {
-                discountPrice += prices[index] - prices[nextMinIndex];
-            }
-
-        }
-
-        result.add(String.valueOf(discountPrice));
-        Collections.sort(fullPriceIndexes);
         StringBuilder sb = new StringBuilder();
-        for (var index = 0; index < fullPriceIndexes.size(); index++) {
-            sb.append(fullPriceIndexes.get(index));
-            if (index != fullPriceIndexes.size() - 1) {
-                sb.append(" ");
-            }
+        for (int i = 0; i < noDiscountIndices.size(); i++) {
+            sb.append(noDiscountIndices.get(i));
+            if (i < noDiscountIndices.size() - 1) sb.append(" ");
         }
         result.add(sb.toString());
+
         return result;
     }
+
 
     public static int getNextMaxIndex(int[] prices, int i) {
         var minPrice = prices[i];
